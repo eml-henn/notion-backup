@@ -1,3 +1,7 @@
+## fork of the original package from darobin, see below ##
+
+this only exports html.
+
 
 **⚠️⚠️⚠️ I am no longer maintaining this. ⚠️⚠️⚠️** I stopped using Notion, I don't like the direction that the product is headed in
 and I got tired of having to constantly fight the API just to get my own data back. I have switched to Obsidian and don't plan on
