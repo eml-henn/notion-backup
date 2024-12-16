@@ -1,5 +1,5 @@
 {
-  "name": "notion-backup",
+  "name": "@eml/notion-backup",
   "version": "1.4.1",
   "description": "Notion exporter meant to be used as part of a GitHub workflow",
   "main": "./notion-backup.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/darobin/notion-backup.git"
+    "url": "https://github.com/eml-henn/notion-backup.git"
   },
   "eslintConfig": {
     "extends": "robin"
