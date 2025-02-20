@@ -17,6 +17,7 @@ if (!NOTION_TOKEN || !NOTION_FILE_TOKEN || !NOTION_SPACE_ID) {
 
 const client = axios.create({
   baseURL: NOTION_API,
+  timeout: 180000,
   headers: {
     Cookie: `token_v2=${NOTION_TOKEN}; file_token=${NOTION_FILE_TOKEN}`,
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36',
@@ -41,13 +42,24 @@ async function post(endpoint, data) {
   }
 }
 
+async function postWithRetry(endpoint, data) {
+  return retry(
+    {
+      times: 3,
+      interval: 2000,
+      errorFilter: err => err.response?.status === 504
+    },
+    async () => post(endpoint, data)
+  );
+}
+
 async function sleep(seconds) {
   return new Promise(resolve => setTimeout(resolve, seconds * 1000));
 }
 
 async function getExportURL(startTime) {
   while (true) {
-    await sleep(10);
+    await sleep(30);
     let payload = {
       spaceId: NOTION_SPACE_ID,
       size: 20,
@@ -87,7 +99,7 @@ async function exportFromNotion(format) {
   try {
       console.log(`📤 Initiating export for format: ${format}`);
       let startTime = Date.now();
-      await post('enqueueTask', {
+      await postWithRetry('enqueueTask', {
       task: {
         eventName: 'exportSpace',
         request: {
